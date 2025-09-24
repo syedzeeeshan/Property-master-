@@ -877,7 +877,7 @@ function initializeUploadZones() {
     });
 }
 
-// Additional utility functions
+// utility function 
 function refreshList() {
     showNotification('Property list refreshed', 'success');
     updateStats();
@@ -933,7 +933,7 @@ function previewProperty() {
     const form = document.getElementById('propertyForm');
     const formData = new FormData(form);
     
-    // Basic validation
+    // validation 
     const propertyId = formData.get('propertyId') || document.getElementById('propertyId').value;
     const propertyName = formData.get('propertyName') || document.getElementById('propertyName').value;
     
@@ -955,3 +955,65 @@ function updateAttributes() {
         showNotification(`Updated attributes for ${propertyType} properties`, 'info');
     }
 }
+
+function processUpload() {
+    showNotification('Processing uploaded files...', 'info');
+    simulateFileProcessing('manual-process');
+}
+
+function validateData() {
+    showNotification('Validating uploaded data...', 'info');
+    setTimeout(() => {
+        showNotification('Data validation completed successfully', 'success');
+    }, 2000);
+}
+
+function refreshAnalytics() {
+    showNotification('Analytics refreshed', 'success');
+    // Update analytics 
+}
+
+function exportAnalytics() {
+    const analyticsData = {
+        totalValue: '$2.5M',
+        occupancyRate: '87%',
+        avgPricePerSqFt: '$1,250',
+        propertiesThisMonth: '15',
+        avgPropertyValue: '$180K',
+        avgDaysToSell: '45'
+    };
+    
+    const csvContent = Object.entries(analyticsData)
+        .map(([key, value]) => `${key},${value}`)
+        .join('
+');
+    
+    downloadFile(`Metric,Value
+${csvContent}`, 'analytics-report.csv', 'text/csv');
+    showNotification('Analytics report exported successfully', 'success');
+}
+
+// Click outside to close modal function 
+window.addEventListener('click', function(event) {
+    const modal = document.getElementById('modal');
+    if (event.target === modal) {
+        closeModal();
+    }
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(event) {
+    // close modal
+    if (event.key === 'Escape') {
+        closeModal();
+    }
+    
+    // Ctrl+S to save form
+    if (event.ctrlKey && event.key === 's') {
+        event.preventDefault();
+        const form = document.getElementById('propertyForm');
+        if (form) {
+            form.dispatchEvent(new Event('submit'));
+        }
+    }
+});
