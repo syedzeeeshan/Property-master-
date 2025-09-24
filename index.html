@@ -37,16 +37,16 @@
 
         <!-- Tabs Navigation -->
         <div class="tabs">
-            <button class="tab active" data-tab="property-form">
+            <button class="tab active" onclick="switchTab(event, 'property-form')">
                 <i class="fas fa-plus-circle"></i> Add Property
             </button>
-            <button class="tab" data-tab="property-list">
+            <button class="tab" onclick="switchTab(event, 'property-list')">
                 <i class="fas fa-list"></i> Property List
             </button>
-            <button class="tab" data-tab="bulk-upload">
+            <button class="tab" onclick="switchTab(event, 'bulk-upload')">
                 <i class="fas fa-upload"></i> Bulk Upload
             </button>
-            <button class="tab" data-tab="analytics">
+            <button class="tab" onclick="switchTab(event, 'analytics')">
                 <i class="fas fa-chart-bar"></i> Analytics
             </button>
         </div>
@@ -58,18 +58,29 @@
                     <div class="card-title">
                         <i class="fas fa-home"></i> Property Information
                     </div>
+                    <div class="card-actions">
+                        <button class="btn btn-outline btn-sm" onclick="resetForm()">
+                            <i class="fas fa-refresh"></i> Reset
+                        </button>
+                    </div>
                 </div>
 
                 <form id="propertyForm">
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Property ID <span class="required">*</span></label>
-                            <input type="text" class="form-control" id="propertyId" required>
+                            <div class="input-group">
+                                <i class="fas fa-tag input-group-icon"></i>
+                                <input type="text" class="form-control" id="propertyId" required>
+                            </div>
                         </div>
                         
                         <div class="form-group">
                             <label>Property Name <span class="required">*</span></label>
-                            <input type="text" class="form-control" id="propertyName" required>
+                            <div class="input-group">
+                                <i class="fas fa-home input-group-icon"></i>
+                                <input type="text" class="form-control" id="propertyName" required>
+                            </div>
                         </div>
                         
                         <div class="form-group">
@@ -79,43 +90,98 @@
                                 <option value="sunrise-heights">Sunrise Heights</option>
                                 <option value="ocean-view">Ocean View Residences</option>
                                 <option value="downtown-plaza">Downtown Plaza</option>
+                                <option value="garden-city">Garden City</option>
                             </select>
                         </div>
                         
                         <div class="form-group">
                             <label>Property Type <span class="required">*</span></label>
-                            <select class="form-control" id="propertyType" required>
+                            <select class="form-control" id="propertyType" required onchange="updateAttributes()">
                                 <option value="">Select Type</option>
                                 <option value="residential">Residential</option>
                                 <option value="commercial">Commercial</option>
                                 <option value="industrial">Industrial</option>
+                                <option value="mixed">Mixed Use</option>
                             </select>
                         </div>
                         
                         <div class="form-group">
                             <label>Building</label>
-                            <input type="text" class="form-control" id="building">
+                            <div class="input-group">
+                                <i class="fas fa-building input-group-icon"></i>
+                                <input type="text" class="form-control" id="building" placeholder="e.g., Block A, Tower 1">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Floor</label>
+                            <div class="input-group">
+                                <i class="fas fa-layer-group input-group-icon"></i>
+                                <input type="text" class="form-control" id="floor" placeholder="e.g., Ground, 1st, 2nd">
+                            </div>
                         </div>
                         
                         <div class="form-group">
                             <label>Unit Number</label>
-                            <input type="text" class="form-control" id="unit">
+                            <div class="input-group">
+                                <i class="fas fa-door-open input-group-icon"></i>
+                                <input type="text" class="form-control" id="unit" placeholder="e.g., A-G-001">
+                            </div>
                         </div>
                         
                         <div class="form-group">
                             <label>Area (Sq Ft) <span class="required">*</span></label>
-                            <input type="number" class="form-control" id="area" required>
+                            <div class="input-group">
+                                <i class="fas fa-ruler-combined input-group-icon"></i>
+                                <input type="number" class="form-control" id="area" required>
+                            </div>
                         </div>
                         
                         <div class="form-group">
                             <label>Base Price <span class="required">*</span></label>
-                            <input type="number" class="form-control" id="price" required>
+                            <div class="input-group">
+                                <i class="fas fa-dollar-sign input-group-icon"></i>
+                                <input type="number" class="form-control" id="price" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select class="form-control" id="status">
+                                <option value="available">Available</option>
+                                <option value="reserved">Reserved</option>
+                                <option value="sold">Sold</option>
+                                <option value="maintenance">Under Maintenance</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Bedrooms</label>
+                            <select class="form-control" id="bedrooms">
+                                <option value="">Select</option>
+                                <option value="studio">Studio</option>
+                                <option value="1">1 Bedroom</option>
+                                <option value="2">2 Bedrooms</option>
+                                <option value="3">3 Bedrooms</option>
+                                <option value="4">4+ Bedrooms</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Bathrooms</label>
+                            <input type="number" class="form-control" id="bathrooms" min="1" max="10">
                         </div>
                     </div>
                     
                     <div class="btn-group">
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-save"></i> Save Property
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="previewProperty()">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                        <button type="button" class="btn btn-secondary" onclick="exportProperty()">
+                            <i class="fas fa-download"></i> Export
                         </button>
                     </div>
                 </form>
@@ -129,31 +195,93 @@
                     <div class="card-title">
                         <i class="fas fa-list"></i> Property Portfolio
                     </div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary btn-sm" onclick="refreshList()">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                        <button class="btn btn-success btn-sm" onclick="exportList()">
+                            <i class="fas fa-file-excel"></i> Export
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search properties..." id="searchInput" oninput="filterProperties()">
                 </div>
                 
                 <div class="table-container">
-                    <table class="table">
+                    <table class="table" id="propertyTable">
                         <thead>
                             <tr>
                                 <th>Property ID</th>
                                 <th>Name</th>
                                 <th>Project</th>
                                 <th>Type</th>
-                                <th>Area</th>
+                                <th>Building</th>
+                                <th>Unit</th>
+                                <th>Area (Sq Ft)</th>
                                 <th>Price</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="propertyTableBody">
                             <tr>
                                 <td>P001</td>
-                                <td>Sunrise Heights A-001</td>
+                                <td>Sunrise Heights A-G-001</td>
                                 <td>Sunrise Heights</td>
                                 <td>Residential</td>
+                                <td>Block A</td>
+                                <td>A-G-001</td>
                                 <td>1,200</td>
                                 <td>$250,000</td>
+                                <td><span class="status-badge status-available">Available</span></td>
                                 <td>
-                                    <button class="btn btn-primary btn-sm">Edit</button>
+                                    <button class="btn btn-primary btn-sm" onclick="editProperty('P001')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" onclick="viewProperty('P001')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P002</td>
+                                <td>Ocean View B-1-002</td>
+                                <td>Ocean View Residences</td>
+                                <td>Residential</td>
+                                <td>Block B</td>
+                                <td>B-1-002</td>
+                                <td>850</td>
+                                <td>$180,000</td>
+                                <td><span class="status-badge status-reserved">Reserved</span></td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="editProperty('P002')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" onclick="viewProperty('P002')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P003</td>
+                                <td>Downtown Plaza C-2-003</td>
+                                <td>Downtown Plaza</td>
+                                <td>Commercial</td>
+                                <td>Block C</td>
+                                <td>C-2-003</td>
+                                <td>1,500</td>
+                                <td>$320,000</td>
+                                <td><span class="status-badge status-sold">Sold</span></td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="editProperty('P003')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" onclick="viewProperty('P003')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>
@@ -171,12 +299,39 @@
                     </div>
                 </div>
                 
-                <div class="upload-zone">
-                    <div class="upload-icon">
-                        <i class="fas fa-cloud-upload-alt"></i>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Property Master Upload</label>
+                        <div class="upload-zone" onclick="document.getElementById('propertyFile').click()">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h3>Upload Property Master</h3>
+                            <p>Drag and drop your Excel file here or click to browse</p>
+                            <input type="file" id="propertyFile" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileUpload(this)">
+                        </div>
                     </div>
-                    <h3>Upload Property Files</h3>
-                    <p>Drag and drop your Excel files here</p>
+                    
+                    <div class="form-group">
+                        <label>Price List Upload</label>
+                        <div class="upload-zone" onclick="document.getElementById('priceFile').click()">
+                            <div class="upload-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <h3>Upload Price List</h3>
+                            <p>Drag and drop your pricing Excel file here or click to browse</p>
+                            <input type="file" id="priceFile" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileUpload(this)">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-download"></i> Download Template
+                    </button>
+                    <button class="btn btn-success">
+                        <i class="fas fa-check"></i> Process Upload
+                    </button>
                 </div>
             </div>
         </div>
@@ -199,31 +354,66 @@
                         <div class="stat-number">87%</div>
                         <div class="stat-label">Occupancy Rate</div>
                     </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$1,250</div>
+                        <div class="stat-label">Avg Price per Sq Ft</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">Properties This Month</div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Tab switching functionality - Fixed version
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.tab');
-            const tabContents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const targetTab = this.getAttribute('data-tab');
-                    
-                    // Remove active class from all tabs and contents
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tabContents.forEach(content => content.classList.remove('active'));
-                    
-                    // Add active class to clicked tab and corresponding content
-                    this.classList.add('active');
-                    document.getElementById(targetTab).classList.add('active');
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                <h2 id="modalTitle">Property Details</h2>
+            </div>
+            <div id="modalBody">
+                <!-- Modal content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <span id="notificationText"></span>
+    </div>
+
+<script>
+// Tab switching functionality
+function switchTab(event, tabName) {
+    // Hide all tab contents
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => content.classList.remove('active'));
+    
+    // Remove active class from all tabs
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Show selected tab content and mark tab as active
+    document.getElementById(tabName).classList.add('active');
+    event.target.classList.add('active');
+}
+
+// Property data storage
+let properties = [
+    {
+        id: 'P001',
+        name: 'Sunrise Heights A-G-001',
+        project: 'Sunrise Heights',
+        type: 'Residential',
+        building: 'Block A',
+        unit: 'A-G-001',
+        area: 1200,
+        price: 250000,
+        status: 'available'
+    },
+    {
+        id: 'P002', 
+        name: 'Ocean View 
