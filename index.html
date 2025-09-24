@@ -146,6 +146,14 @@
                         </div>
                         
                         <div class="form-group">
+                            <label>Price per Sq Ft</label>
+                            <div class="input-group">
+                                <i class="fas fa-calculator input-group-icon"></i>
+                                <input type="number" class="form-control" id="pricePerSqFt" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
                             <label>Status</label>
                             <select class="form-control" id="status">
                                 <option value="available">Available</option>
@@ -171,6 +179,87 @@
                             <label>Bathrooms</label>
                             <input type="number" class="form-control" id="bathrooms" min="1" max="10">
                         </div>
+                        
+                        <div class="form-group">
+                            <label>Parking Spaces</label>
+                            <input type="number" class="form-control" id="parking" min="0" max="5">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Balcony</label>
+                            <select class="form-control" id="balcony">
+                                <option value="">Select</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Facing Direction</label>
+                            <select class="form-control" id="facing">
+                                <option value="">Select</option>
+                                <option value="north">North</option>
+                                <option value="south">South</option>
+                                <option value="east">East</option>
+                                <option value="west">West</option>
+                                <option value="northeast">North-East</option>
+                                <option value="northwest">North-West</option>
+                                <option value="southeast">South-East</option>
+                                <option value="southwest">South-West</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>View Type</label>
+                            <select class="form-control" id="viewType">
+                                <option value="">Select</option>
+                                <option value="city">City View</option>
+                                <option value="garden">Garden View</option>
+                                <option value="pool">Pool View</option>
+                                <option value="street">Street View</option>
+                                <option value="courtyard">Courtyard View</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Furnished Status</label>
+                            <select class="form-control" id="furnished">
+                                <option value="">Select</option>
+                                <option value="unfurnished">Unfurnished</option>
+                                <option value="semi-furnished">Semi Furnished</option>
+                                <option value="fully-furnished">Fully Furnished</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Effective From</label>
+                            <input type="date" class="form-control" id="effectiveFrom">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Effective To</label>
+                            <input type="date" class="form-control" id="effectiveTo">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Agent/Contact Person</label>
+                            <input type="text" class="form-control" id="agent" placeholder="Agent name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Contact Number</label>
+                            <input type="tel" class="form-control" id="contactNumber" placeholder="+1-234-567-8900">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="agent@example.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" id="description" rows="3" placeholder="Property description..."></textarea>
+                        </div>
                     </div>
                     
                     <div class="btn-group">
@@ -182,6 +271,9 @@
                         </button>
                         <button type="button" class="btn btn-secondary" onclick="exportProperty()">
                             <i class="fas fa-download"></i> Export
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="clearForm()">
+                            <i class="fas fa-eraser"></i> Clear
                         </button>
                     </div>
                 </form>
@@ -202,6 +294,9 @@
                         <button class="btn btn-success btn-sm" onclick="exportList()">
                             <i class="fas fa-file-excel"></i> Export
                         </button>
+                        <button class="btn btn-secondary btn-sm" onclick="importList()">
+                            <i class="fas fa-file-import"></i> Import
+                        </button>
                     </div>
                 </div>
                 
@@ -210,10 +305,27 @@
                     <input type="text" placeholder="Search properties..." id="searchInput" oninput="filterProperties()">
                 </div>
                 
+                <div class="filters">
+                    <select id="statusFilter" class="form-control" onchange="filterByStatus()">
+                        <option value="">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="sold">Sold</option>
+                    </select>
+                    
+                    <select id="typeFilter" class="form-control" onchange="filterByType()">
+                        <option value="">All Types</option>
+                        <option value="residential">Residential</option>
+                        <option value="commercial">Commercial</option>
+                        <option value="industrial">Industrial</option>
+                    </select>
+                </div>
+                
                 <div class="table-container">
                     <table class="table" id="propertyTable">
                         <thead>
                             <tr>
+                                <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
                                 <th>Property ID</th>
                                 <th>Name</th>
                                 <th>Project</th>
@@ -223,11 +335,13 @@
                                 <th>Area (Sq Ft)</th>
                                 <th>Price</th>
                                 <th>Status</th>
+                                <th>Agent</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody id="propertyTableBody">
                             <tr>
+                                <td><input type="checkbox" class="property-select"></td>
                                 <td>P001</td>
                                 <td>Sunrise Heights A-G-001</td>
                                 <td>Sunrise Heights</td>
@@ -237,6 +351,7 @@
                                 <td>1,200</td>
                                 <td>$250,000</td>
                                 <td><span class="status-badge status-available">Available</span></td>
+                                <td>John Doe</td>
                                 <td>
                                     <button class="btn btn-primary btn-sm" onclick="editProperty('P001')">
                                         <i class="fas fa-edit"></i>
@@ -244,9 +359,13 @@
                                     <button class="btn btn-secondary btn-sm" onclick="viewProperty('P001')">
                                         <i class="fas fa-eye"></i>
                                     </button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteProperty('P001')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
+                                <td><input type="checkbox" class="property-select"></td>
                                 <td>P002</td>
                                 <td>Ocean View B-1-002</td>
                                 <td>Ocean View Residences</td>
@@ -255,165 +374,4 @@
                                 <td>B-1-002</td>
                                 <td>850</td>
                                 <td>$180,000</td>
-                                <td><span class="status-badge status-reserved">Reserved</span></td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm" onclick="editProperty('P002')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-secondary btn-sm" onclick="viewProperty('P002')">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>P003</td>
-                                <td>Downtown Plaza C-2-003</td>
-                                <td>Downtown Plaza</td>
-                                <td>Commercial</td>
-                                <td>Block C</td>
-                                <td>C-2-003</td>
-                                <td>1,500</td>
-                                <td>$320,000</td>
-                                <td><span class="status-badge status-sold">Sold</span></td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm" onclick="editProperty('P003')">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button class="btn btn-secondary btn-sm" onclick="viewProperty('P003')">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bulk Upload Tab -->
-        <div id="bulk-upload" class="tab-content">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-upload"></i> Bulk Upload Properties
-                    </div>
-                </div>
-                
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Property Master Upload</label>
-                        <div class="upload-zone" onclick="document.getElementById('propertyFile').click()">
-                            <div class="upload-icon">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                            </div>
-                            <h3>Upload Property Master</h3>
-                            <p>Drag and drop your Excel file here or click to browse</p>
-                            <input type="file" id="propertyFile" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileUpload(this)">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Price List Upload</label>
-                        <div class="upload-zone" onclick="document.getElementById('priceFile').click()">
-                            <div class="upload-icon">
-                                <i class="fas fa-dollar-sign"></i>
-                            </div>
-                            <h3>Upload Price List</h3>
-                            <p>Drag and drop your pricing Excel file here or click to browse</p>
-                            <input type="file" id="priceFile" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileUpload(this)">
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="btn-group">
-                    <button class="btn btn-primary">
-                        <i class="fas fa-download"></i> Download Template
-                    </button>
-                    <button class="btn btn-success">
-                        <i class="fas fa-check"></i> Process Upload
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Analytics Tab -->
-        <div id="analytics" class="tab-content">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">
-                        <i class="fas fa-chart-bar"></i> Property Analytics
-                    </div>
-                </div>
-                
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number">$2.5M</div>
-                        <div class="stat-label">Total Portfolio Value</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">87%</div>
-                        <div class="stat-label">Occupancy Rate</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">$1,250</div>
-                        <div class="stat-label">Avg Price per Sq Ft</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">15</div>
-                        <div class="stat-label">Properties This Month</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">&times;</button>
-            <div class="modal-header">
-                <h2 id="modalTitle">Property Details</h2>
-            </div>
-            <div id="modalBody">
-                <!-- Modal content will be inserted here -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification -->
-    <div id="notification" class="notification">
-        <span id="notificationText"></span>
-    </div>
-
-<script>
-// Tab switching functionality
-function switchTab(event, tabName) {
-    // Hide all tab contents
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabContents.forEach(content => content.classList.remove('active'));
-    
-    // Remove active class from all tabs
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(tab => tab.classList.remove('active'));
-    
-    // Show selected tab content and mark tab as active
-    document.getElementById(tabName).classList.add('active');
-    event.target.classList.add('active');
-}
-
-// Property data storage
-let properties = [
-    {
-        id: 'P001',
-        name: 'Sunrise Heights A-G-001',
-        project: 'Sunrise Heights',
-        type: 'Residential',
-        building: 'Block A',
-        unit: 'A-G-001',
-        area: 1200,
-        price: 250000,
-        status: 'available'
-    },
-    {
-        id: 'P002', 
-        name: 'Ocean View 
+                                <td><span class
