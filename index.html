@@ -374,4 +374,261 @@
                                 <td>B-1-002</td>
                                 <td>850</td>
                                 <td>$180,000</td>
-                                <td><span class
+                                <td><span class="status-badge status-reserved">Reserved</span></td>
+                                <td>Jane Smith</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="editProperty('P002')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" onclick="viewProperty('P002')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteProperty('P002')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" class="property-select"></td>
+                                <td>P003</td>
+                                <td>Downtown Plaza C-2-003</td>
+                                <td>Downtown Plaza</td>
+                                <td>Commercial</td>
+                                <td>Block C</td>
+                                <td>C-2-003</td>
+                                <td>1,500</td>
+                                <td>$320,000</td>
+                                <td><span class="status-badge status-sold">Sold</span></td>
+                                <td>Mike Johnson</td>
+                                <td>
+                                    <button class="btn btn-primary btn-sm" onclick="editProperty('P003')">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" onclick="viewProperty('P003')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteProperty('P003')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="bulk-actions">
+                    <button class="btn btn-primary" onclick="bulkEdit()">
+                        <i class="fas fa-edit"></i> Bulk Edit
+                    </button>
+                    <button class="btn btn-danger" onclick="bulkDelete()">
+                        <i class="fas fa-trash"></i> Bulk Delete
+                    </button>
+                    <button class="btn btn-success" onclick="bulkExport()">
+                        <i class="fas fa-download"></i> Export Selected
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bulk Upload Tab -->
+        <div id="bulk-upload" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-upload"></i> Bulk Upload Properties
+                    </div>
+                </div>
+                
+                <div class="upload-instructions">
+                    <h3>Upload Instructions</h3>
+                    <ul>
+                        <li>Download the template file first</li>
+                        <li>Fill in your property data in the template</li>
+                        <li>Save as Excel (.xlsx) or CSV format</li>
+                        <li>Upload the completed file</li>
+                    </ul>
+                </div>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Property Master Upload</label>
+                        <div class="upload-zone" onclick="document.getElementById('propertyFile').click()">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <h3>Upload Property Master</h3>
+                            <p>Drag and drop your Excel file here or click to browse</p>
+                            <p class="upload-info">Supported formats: .xlsx, .xls, .csv</p>
+                            <input type="file" id="propertyFile" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileUpload(this)">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Price List Upload</label>
+                        <div class="upload-zone" onclick="document.getElementById('priceFile').click()">
+                            <div class="upload-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <h3>Upload Price List</h3>
+                            <p>Drag and drop your pricing Excel file here or click to browse</p>
+                            <p class="upload-info">Supported formats: .xlsx, .xls, .csv</p>
+                            <input type="file" id="priceFile" accept=".xlsx,.xls,.csv" style="display: none;" onchange="handleFileUpload(this)">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">Uploading... 0%</div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-download"></i> Download Template
+                    </button>
+                    <button class="btn btn-success" onclick="processUpload()">
+                        <i class="fas fa-check"></i> Process Upload
+                    </button>
+                    <button class="btn btn-secondary" onclick="validateData()">
+                        <i class="fas fa-check-double"></i> Validate Data
+                    </button>
+                </div>
+                
+                <div class="upload-results" id="uploadResults">
+                    <!-- Upload results will be displayed here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analytics" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">
+                        <i class="fas fa-chart-bar"></i> Property Analytics
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-primary btn-sm" onclick="refreshAnalytics()">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                        <button class="btn btn-success btn-sm" onclick="exportAnalytics()">
+                            <i class="fas fa-file-export"></i> Export Report
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="analytics-filters">
+                    <select class="form-control" id="analyticsProject">
+                        <option value="">All Projects</option>
+                        <option value="sunrise-heights">Sunrise Heights</option>
+                        <option value="ocean-view">Ocean View Residences</option>
+                        <option value="downtown-plaza">Downtown Plaza</option>
+                    </select>
+                    
+                    <select class="form-control" id="analyticsTimeframe">
+                        <option value="month">This Month</option>
+                        <option value="quarter">This Quarter</option>
+                        <option value="year">This Year</option>
+                        <option value="all">All Time</option>
+                    </select>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">$2.5M</div>
+                        <div class="stat-label">Total Portfolio Value</div>
+                        <div class="stat-change positive">+12.5%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">87%</div>
+                        <div class="stat-label">Occupancy Rate</div>
+                        <div class="stat-change positive">+5.2%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$1,250</div>
+                        <div class="stat-label">Avg Price per Sq Ft</div>
+                        <div class="stat-change negative">-2.1%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">Properties This Month</div>
+                        <div class="stat-change positive">+8</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$180K</div>
+                        <div class="stat-label">Average Property Value</div>
+                        <div class="stat-change neutral">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">45</div>
+                        <div class="stat-label">Days to Sell (Avg)</div>
+                        <div class="stat-change positive">-7 days</div>
+                    </div>
+                </div>
+                
+                <div class="analytics-charts">
+                    <div class="chart-container">
+                        <h3>Property Distribution by Type</h3>
+                        <div class="chart-placeholder" id="typeChart">
+                            <i class="fas fa-chart-pie"></i>
+                            <p>Chart will be rendered here</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Sales Trend (Last 12 Months)</h3>
+                        <div class="chart-placeholder" id="salesChart">
+                            <i class="fas fa-chart-line"></i>
+                            <p>Chart will be rendered here</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Price Range Distribution</h3>
+                        <div class="chart-placeholder" id="priceChart">
+                            <i class="fas fa-chart-bar"></i>
+                            <p>Chart will be rendered here</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Project Performance</h3>
+                        <div class="chart-placeholder" id="projectChart">
+                            <i class="fas fa-chart-area"></i>
+                            <p>Chart will be rendered here</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-header">
+                <h2 id="modalTitle">Property Details</h2>
+            </div>
+            <div id="modalBody">
+                <!-- Modal content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <span id="notificationText"></span>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
