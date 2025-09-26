@@ -1619,8 +1619,7 @@ function exportAnalytics() {
     
     const csvContent = Object.entries(analyticsData)
         .map(([key, value]) => `${key},${value}`)
-        .join('
-');
+        .join('');
     
     downloadFile(`Metric,Value
 ${csvContent}`, 'analytics-report.csv', 'text/csv');
