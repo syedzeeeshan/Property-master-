@@ -1231,20 +1231,23 @@ function downloadFile(content, filename, contentType) {
 // Modal Functions
 function showModal() {
     const modal = document.getElementById('modal');
-    if (modal) {
+        if (modal) {
         modal.classList.add('show');
     }
 }
 
 function closeModal() {
-    const modal = document.getElementById('    
+    const modal = document.getElementById('modal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
     initializeUploadZones();
-    
-    
     updateStats();
 });
 
-// Add property to storage
 function addPropertyToStorage(propertyData) {
     const newProperty = {
         id: propertyData.propertyId,
