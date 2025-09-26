@@ -1526,7 +1526,7 @@ function exportList() {
 
 function convertToCSV(data) {
     if (!data.length) return '';
-    
+
     const headers = ['ID', 'Name', 'Project', 'Type', 'Building', 'Unit', 'Area', 'Price', 'Status', 'Bedrooms', 'Bathrooms'];
     const csvContent = [
         headers.join(','),
@@ -1543,9 +1543,8 @@ function convertToCSV(data) {
             row.bedrooms || '',
             row.bathrooms || ''
         ].join(','))
-    ].join('
-');
-    
+    ].join('\n');
+
     return csvContent;
 }
 
