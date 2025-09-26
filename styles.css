@@ -593,3 +593,7 @@ body {
         font-size: 12px;
     }
 }
+
+.modal { display: none; opacity: 0; transition: opacity 0.3s ease; }
+.modal.show { display: block; opacity: 1; }
+
